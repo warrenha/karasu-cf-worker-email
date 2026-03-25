@@ -77,3 +77,24 @@ pnpm create cloudflare@latest karasu-cf-functions
 > karasu-cf-functions@0.0.0 deploy /Users/warren/git/karasu/karasu-cf-functions
 > wrangler deploy
 ```
+
+# Initialize the .git directory locally
+cd karasu-cf-functions
+git init -b main
+git add .
+git commit -m "Initial"
+
+# Using multiple ssh keys & emails in ~/.ssh/config
+ssh -T git@github.com
+ssh -T git@github-wh.com
+
+git config --list
+git config --global user.name
+git config --global user.email
+git config --global user.email "my.user.name@gmail.com"
+
+# Using 'github-wh.com' as defined in ~/.ssh/config
+git remote add origin git@github-wh.com:warrenha/karasu-home.git
+git remote -v
+git push -u origin main
+```

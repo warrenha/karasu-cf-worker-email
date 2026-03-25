@@ -1,0 +1,19 @@
+info:
+  name: Worker test 1
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: https://karasu-cf-functions.karasu-account.workers.dev?test=blah
+  params:
+    - name: test
+      value: blah
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
