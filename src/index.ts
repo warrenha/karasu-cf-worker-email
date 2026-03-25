@@ -1,27 +1,40 @@
+import { EmailMessage } from 'cloudflare:email'
+import { createMimeMessage } from 'mimetext'
+
+// Configured in Cloudflare 'Email Routing'
+const SenderEmail = 'hello@karasu.co.uk'
+const ReceiverEmail = 'hello@karasu.co.uk'
+
 /*
- * Welcome to Cloudflare Workers!
- *
- * - Run `pnpm run dev` in your terminal to start a development server
- * - Open a browser tab at http://localhost:8787/ to see your worker in action
- * - Run `pnpm run deploy` to publish your worker
- *
- * Bind resources to your worker in `wrangler.jsonc`. After adding bindings, a type definition for the
- * `Env` object can be regenerated with `npm run cf-typegen`.
- *
- * Learn more at https://developers.cloudflare.com/workers/
+ * Cloudflare Worker.
+ *   Receive an API request, and send a test email.
  */
 export default {
+    async fetch(request: any, env: any) {
+        console.info(`Send Email Worker [request=${typeof request}, env=${typeof env}`)
+        console.info(`env keys=${Object.keys(env)}`)
+        const msg = createMimeMessage()
 
-	async fetch(request, env, ctx): Promise<Response> {
-        const url = new URL(request.url)
+        msg.setSender({ name: 'Karasu Ltd', addr: SenderEmail })
+        msg.setRecipient(ReceiverEmail)
+        msg.setSubject('An email generated in a worker')
+        msg.addMessage({
+            contentType: 'text/plain',
+            data: `Congratulations, you just sent an email from a worker.`
+        })
+        const message = new EmailMessage(
+            SenderEmail, // sender
+            ReceiverEmail, // recipient
+            msg.asRaw()
+        )
 
-        const value = url.searchParams.get('test') || null
-
-        const data = {
-            hello: "world",
-            value,
-            version: 1.0
+        try {
+            const service = env.CONTACT_ME_EMAIL_SERVICE // defined in wrangler.jsonc
+            await service.send(message)
+        } catch (e: any) {
+            return new Response(e.message)
         }
-        return Response.json(data)
-	}
-} satisfies ExportedHandler<Env>
+
+        return new Response('Hello Send Email World!')
+    }
+}

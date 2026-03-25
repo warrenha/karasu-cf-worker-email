@@ -98,3 +98,9 @@ git remote add origin git@github-wh.com:warrenha/karasu-home.git
 git remote -v
 git push -u origin main
 ```
+
+##
+After changing the wrangler.jsonc file, run:
+`
+% pnpm wrangler types
+`
