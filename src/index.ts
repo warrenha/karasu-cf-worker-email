@@ -31,7 +31,10 @@ export default {
         try {
             const service = env.CONTACT_ME_EMAIL_SERVICE // defined in wrangler.jsonc
             await service.send(message)
+            console.info('Email SUCCESS')
         } catch (e: any) {
+            console.warn(`Email ERROR: {e.message}`)
+            console.warn(e)
             return new Response(e.message)
         }
 
