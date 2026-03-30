@@ -37,7 +37,7 @@ export const sendEmail = async (
             await service.send(message)
             console.info('Email SUCCESS')
         } catch (e: any) {
-            console.warn(`Email ERROR: {e.message}`)
+            console.warn(`Email ERROR: ${e.message}`)
             console.warn(e)
             throw new Error(`Error sending email: ${e.message}`)
         }
