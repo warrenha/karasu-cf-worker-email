@@ -1,43 +1,35 @@
-import { EmailMessage } from 'cloudflare:email'
-import { createMimeMessage } from 'mimetext'
+import { sendEmail } from './EmailService'
+import { handleOptions, handlePost/*, parseBody*/, parseRequest } from './WorkerHelper'
 
-// Configured in Cloudflare 'Email Routing'
-const SenderEmail = 'hello@karasu.co.uk'
-const ReceiverEmail = 'hello@karasu.co.uk'
+type Payload = {
+    status: 'success' | 'error'
+    message: string | null
+}
 
 /*
  * Cloudflare Worker.
- *   Receive an API request, and send a test email.
+ *   Receives an API request, & sends a contact email.
  */
 export default {
-    async fetch(request: any, env: any) {
-        console.info(`Send Email Worker [request=${typeof request}, env=${typeof env}`)
-        console.info(`env keys=${Object.keys(env)}`)
-        const msg = createMimeMessage()
+    async fetch(request: Request, env: Env): Promise<Response> {
+        const { url, method, contentType } = parseRequest(request)
+        console.info(`[Send Email Worker] ${contentType}, env: ${Object.keys(env)}`)
 
-        msg.setSender({ name: 'Karasu Ltd', addr: SenderEmail })
-        msg.setRecipient(ReceiverEmail)
-        msg.setSubject('An email generated in a worker')
-        msg.addMessage({
-            contentType: 'text/plain',
-            data: `Congratulations, you just sent an email from a worker.`
-        })
-        const message = new EmailMessage(
-            SenderEmail, // sender
-            ReceiverEmail, // recipient
-            msg.asRaw()
-        )
-
-        try {
-            const service = env.CONTACT_ME_EMAIL_SERVICE // defined in wrangler.jsonc
-            await service.send(message)
-            console.info('Email SUCCESS')
-        } catch (e: any) {
-            console.warn(`Email ERROR: {e.message}`)
-            console.warn(e)
-            return new Response(e.message)
+        const doSendEmail = async (): Promise<Payload> => {
+            return sendEmail(env)
+                .then(() => {
+                    return { status: 'success', message: `Successfully sent an email!`} as const
+                })
+                .catch(e => {
+                    return { status: 'error', message: e.message } as const
+                })
         }
 
-        return new Response('Hello Send Email World!')
+        if (method === 'OPTIONS') {  // CORS preflight
+            return handleOptions()
+        } else if (method === 'POST') {
+            return handlePost(doSendEmail())
+        }
+        return Response.json({ error: `Unexpected method: ${method}` })
     }
 }
