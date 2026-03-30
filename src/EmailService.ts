@@ -22,7 +22,7 @@ export const sendEmail = async (
         m.addMessage({
             contentType: 'text/plain',
             data: '[Message sent from karasu.co.uk contact form]:\n\n' +
-                'Congratulations, you just sent an email from a worker.'
+                'Congratulations, you just sent an email from a worker. 2'
         })
         return new EmailMessage(
             SenderEmail, // sender
