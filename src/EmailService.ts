@@ -4,8 +4,8 @@ import { createMimeMessage } from 'mimetext'
 // Configured in Cloudflare 'Email Routing'
 const SenderName = 'Karasu Ltd'
 const SenderEmail = 'hello@karasu.co.uk'
-//const RecipientEmail = 'hello@karasu.co.uk'
-const RecipientEmail = 'stallman.wotr@gmail.com'
+const RecipientEmail = 'hello@karasu.co.uk'
+//const RecipientEmail = 'stallman.wotr@gmail.com'
 
 // - - - - - Email Service - - - - - //
 
