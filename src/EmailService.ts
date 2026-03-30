@@ -14,7 +14,10 @@ const RecipientEmail = 'hello@karasu.co.uk'
 export const sendEmail = async (
     env: Env
 ): Promise<void> => {  // exception if error
+    console.log({ service: 'sendEmail'});
+
     const createMessage = () => {
+        console.log({ method: 'createMessage'});
         const m = createMimeMessage()
         m.setSender({ name: SenderName, addr: SenderEmail })
         m.setRecipient(RecipientEmail)
@@ -22,7 +25,7 @@ export const sendEmail = async (
         m.addMessage({
             contentType: 'text/plain',
             data: '[Message sent from karasu.co.uk contact form]:\n\n' +
-                'Congratulations, you just sent an email from a worker. 2'
+                'Congratulations, you just sent an email from a worker. v3'
         })
         return new EmailMessage(
             SenderEmail, // sender
@@ -32,17 +35,19 @@ export const sendEmail = async (
     }
 
     const sendToService = async (m: EmailMessage) => {
+        console.log({ method: 'sendToService'});
         try {
             const service = env.CONTACT_ME_EMAIL_SERVICE // defined in wrangler.jsonc
+            console.log({ info: `service: ${typeof service}` })
             await service.send(message)
-            console.info('Email SUCCESS')
+            console.log({ success: 'Email SUCCESS' })
         } catch (e: any) {
-            console.warn(`Email ERROR: ${e.message}`)
-            console.warn(e)
+            console.log({ error: 'Email ERROR' })
+            console.log(e)
             throw new Error(`Error sending email: ${e.message}`)
         }
     }
 
     const message = createMessage()
-    return sendToService(message)
+    await sendToService(message)
 }

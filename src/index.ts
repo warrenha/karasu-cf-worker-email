@@ -12,8 +12,9 @@ type Payload = {
  */
 export default {
     async fetch(request: Request, env: Env): Promise<Response> {
-        const { url, method, contentType } = parseRequest(request)
-        console.info(`[Send Email Worker] ${contentType}, env: ${Object.keys(env)}`)
+        const { method, contentType } = parseRequest(request)
+        console.log({ worker: 'Send Email Worker'})
+        console.log({ method, contentType, env: `${Object.keys(env)}` })
 
         const doSendEmail = async (): Promise<Payload> => {
             return sendEmail(env)
@@ -28,7 +29,8 @@ export default {
         if (method === 'OPTIONS') {  // CORS preflight
             return handleOptions()
         } else if (method === 'POST') {
-            return handlePost(doSendEmail())
+            const payload = doSendEmail()
+            return handlePost(payload)
         }
         return Response.json({ error: `Unexpected method: ${method}` })
     }
