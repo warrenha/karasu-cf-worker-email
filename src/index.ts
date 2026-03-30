@@ -29,8 +29,10 @@ export default {
         if (method === 'OPTIONS') {  // CORS preflight
             return handleOptions()
         } else if (method === 'POST') {
-            const payload = doSendEmail()
+            const payload = await doSendEmail()
+            console.log({ payload });
             return handlePost(payload)
+            //return handlePost({ hello: 'world' })
         }
         return Response.json({ error: `Unexpected method: ${method}` })
     }

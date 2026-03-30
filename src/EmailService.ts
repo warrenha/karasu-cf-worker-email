@@ -4,7 +4,8 @@ import { createMimeMessage } from 'mimetext'
 // Configured in Cloudflare 'Email Routing'
 const SenderName = 'Karasu Ltd'
 const SenderEmail = 'hello@karasu.co.uk'
-const RecipientEmail = 'hello@karasu.co.uk'
+//const RecipientEmail = 'hello@karasu.co.uk'
+const RecipientEmail = 'stallman.wotr@gmail.com'
 
 // - - - - - Email Service - - - - - //
 
@@ -13,7 +14,7 @@ const RecipientEmail = 'hello@karasu.co.uk'
  */
 export const sendEmail = async (
     env: Env
-): Promise<void> => {  // exception if error
+): Promise<any> => {  // exception if error
     console.log({ service: 'sendEmail'});
 
     const createMessage = () => {
@@ -41,13 +42,14 @@ export const sendEmail = async (
             console.log({ info: `service: ${typeof service}` })
             await service.send(message)
             console.log({ success: 'Email SUCCESS' })
+            return { status: 'success', message: 'Email sent!' }
         } catch (e: any) {
             console.log({ error: 'Email ERROR' })
             console.log(e)
-            throw new Error(`Error sending email: ${e.message}`)
+            return { status: 'error', message: 'Error sending email' }  // ${e?.message}`
         }
     }
 
     const message = createMessage()
-    await sendToService(message)
+    return await sendToService(message)
 }
