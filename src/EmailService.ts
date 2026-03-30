@@ -6,8 +6,7 @@ import type { ContactMessage } from './models/ContactMessage'
 // Configured in Cloudflare 'Email Routing'
 const SenderName = 'Karasu Ltd'
 const SenderEmail = 'hello@karasu.co.uk'
-//const RecipientEmail = 'hello@karasu.co.uk'
-const RecipientEmail = 'stallman.wotr@gmail.com'
+const RecipientEmail = 'hello@karasu.co.uk'
 
 // - - - - - Email Service - - - - - //
 

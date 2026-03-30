@@ -43,6 +43,6 @@
     // "services": [  {   "binding": "MY_SERVICE",   "service": "my-service"  } ]
     "send_email": [{
         "name": "CONTACT_ME_EMAIL_SERVICE",
-        "destination_address": "stallman.wotr@gmail.com"
+        "destination_address": "hello@karasu.co.uk"
     }],
 }
