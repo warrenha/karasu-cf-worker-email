@@ -12,18 +12,6 @@ export const corsHeaders = {
 }
 
 /*
- * Parse the JSON request
- */
-export const parseRequest = (request: Request) => {
-    const { method, headers } = request
-
-    const url = new URL(request.url)
-    const contentType = headers.get('content-type') || ''
-
-    return { url, method, contentType }
-}
-
-/*
  * Parse the JSON body, or null if none
  */
 export const parseBody = async (request: Request) => {
@@ -44,6 +32,19 @@ export const parseBody = async (request: Request) => {
     } else {
         return null
     }
+}
+
+/*
+ * Parse the JSON request
+ */
+export const parseRequest = async (request: Request) => {
+    const { method, headers } = request
+
+    const url = new URL(request.url)
+    const contentType = headers.get('content-type') || ''
+    const body = await parseBody(request)
+
+    return { url, method, contentType, body }
 }
 
 /*

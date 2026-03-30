@@ -1,6 +1,8 @@
 import { EmailMessage } from 'cloudflare:email'
 import { createMimeMessage } from 'mimetext'
 
+import type { ContactMessage } from './models/ContactMessage'
+
 // Configured in Cloudflare 'Email Routing'
 const SenderName = 'Karasu Ltd'
 const SenderEmail = 'hello@karasu.co.uk'
@@ -13,12 +15,12 @@ const RecipientEmail = 'stallman.wotr@gmail.com'
  * Sends a 'contact us' email.
  */
 export const sendEmail = async (
+    body: ContactMessage,
     env: Env
 ): Promise<any> => {  // exception if error
-    console.log({ service: 'sendEmail'});
+    console.log({ service: 'sendEmail', body });
 
     const createMessage = () => {
-        console.log({ method: 'createMessage'});
         const m = createMimeMessage()
         m.setSender({ name: SenderName, addr: SenderEmail })
         m.setRecipient(RecipientEmail)
@@ -26,7 +28,9 @@ export const sendEmail = async (
         m.addMessage({
             contentType: 'text/plain',
             data: '[Message sent from karasu.co.uk contact form]:\n\n' +
-                'Congratulations, you just sent an email from a worker. v3'
+                `Name: ${body.name}\n` +
+                `Email: ${body.email}\n` +
+                `Message:\n\n${body.message}`
         })
         return new EmailMessage(
             SenderEmail, // sender
@@ -36,7 +40,6 @@ export const sendEmail = async (
     }
 
     const sendToService = async (m: EmailMessage) => {
-        console.log({ method: 'sendToService'});
         try {
             const service = env.CONTACT_ME_EMAIL_SERVICE // defined in wrangler.jsonc
             console.log({ info: `service: ${typeof service}` })
