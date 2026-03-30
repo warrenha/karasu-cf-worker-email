@@ -1,5 +1,5 @@
 {
-	"name": "karasu-cf-functions",
+	"name": "karasu-cf-worker-email",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
