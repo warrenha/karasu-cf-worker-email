@@ -4,12 +4,12 @@
 
 This project was initialized:
 ```
-pnpm create cloudflare@latest karasu-cf-functions
+pnpm create cloudflare@latest karasu-cf-worker-email
 
 ╭ Create an application with Cloudflare Step 1 of 3
 │
 ├ In which directory do you want to create your application?
-│ dir ./karasu-cf-functions
+│ dir ./karasu-cf-worker-email
 │
 ├ What would you like to start with?
 │ category Hello World example
@@ -74,12 +74,12 @@ pnpm create cloudflare@latest karasu-cf-functions
 │ account Karasu Account
 │
 
-> karasu-cf-functions@0.0.0 deploy /Users/warren/git/karasu/karasu-cf-functions
+> karasu-cf-worker-email@0.0.0 deploy /Users/warren/git/karasu/karasu-cf-worker-email
 > wrangler deploy
 ```
 
 # Initialize the .git directory locally
-cd karasu-cf-functions
+cd karasu-cf-worker-email
 git init -b main
 git add .
 git commit -m "Initial"
